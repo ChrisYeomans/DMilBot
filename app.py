@@ -3,8 +3,9 @@ from Bot import Bot
 
 
 def main():
-    bot = Bot(is_test=False)
+    bot = Bot(is_test=True)
     bot.run()
-    
+
+
 if __name__ == "__main__":
     main()
