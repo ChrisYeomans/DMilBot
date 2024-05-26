@@ -37,6 +37,7 @@ class Bot:
         @self.client.event
         async def on_ready():
             await self.bot_commands.tree.sync(guild=discord.Object(id=self.guild_id))
+            await self.client.change_presence(activity=discord.Game(name="with Thal's Balls"))
             print("Server is Ready!")
 
     def basic_setup(self, is_test):

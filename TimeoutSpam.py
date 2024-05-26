@@ -13,11 +13,15 @@ class TimeoutSpam:
             self.bot.member_spam_check[member_name] += [message_text]
         else:
             self.bot.member_spam_check[member_name] = [message_text]
-        if len(self.bot.member_spam_check[member_name]) >= 3:
-            if all(i.lower() == "scoreboard" for i in self.bot.member_spam_check[member_name]):
-                try:
-                    self.bot.member_spam_check[member_name] = []
-                    await message.channel.send(f"{message.author.mention} DOWN WITH THE SCOREBOARD")
-                    await message.author.timeout(timedelta(minutes=5), reason="STFU")
-                except Exception as e:
-                    print(f"Error {e}")
+        if len(self.bot.member_spam_check[member_name]) >= self.bot.constants.spam_repeat_number:
+            for word in self.bot.constants.spam_timeout_words:
+                if all(i.lower() == word for i in self.bot.member_spam_check[member_name]):
+                    try:
+                        self.bot.member_spam_check[member_name] = []
+                        await message.channel.send(self.bot.constants.spam_timeout_message(message.author, word))
+                        await message.author.timeout(
+                            timedelta(minutes=self.bot.constants.spam_timeout_minutes),
+                            reason=self.bot.constants.spam_timeout_reason()
+                        )
+                    except Exception as e:
+                        print(f"Error {e}")
