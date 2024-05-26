@@ -1,10 +1,14 @@
+from __future__ import annotations
 import discord
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Bot import Bot
 
 
 class BotCommands:
-    def __init__(self, client, bot, setup_test_commands):
+    def __init__(self, bot: Bot, setup_test_commands: bool):
         self.bot = bot
-        self.tree = discord.app_commands.CommandTree(client)
+        self.tree = discord.app_commands.CommandTree(bot.client)
         self.tree.clear_commands(guild=discord.Object(id=bot.guild_id))
         if setup_test_commands:
             self.setup_test_commands(self.tree)

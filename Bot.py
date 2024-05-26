@@ -1,9 +1,11 @@
 import discord
+from discord.ext import tasks
 from bot_constants import BotConstants
 from GameComment import GameComment
 from RngDisconnect import RngDisconnect
 from BotCommands import BotCommands
 from TimeoutSpam import TimeoutSpam
+from BotStatus import BotStatus
 
 
 class Bot:
@@ -19,8 +21,9 @@ class Bot:
         self.rng_disconnect = RngDisconnect(self)
         self.constants = BotConstants()
         self.timeout_spam = TimeoutSpam(self)
-        self.bot_commands = BotCommands(self.client, self, is_test)
+        self.bot_commands = BotCommands(self, is_test)
         self.game_comment = GameComment(self)
+        self.bot_status = BotStatus(self)
 
         @self.client.event
         async def on_message(message):
@@ -37,8 +40,13 @@ class Bot:
         @self.client.event
         async def on_ready():
             await self.bot_commands.tree.sync(guild=discord.Object(id=self.guild_id))
-            await self.client.change_presence(activity=discord.Game(name="with Thal's Balls"))
+            self.bot_status_loop.start()
             print("Server is Ready!")
+
+    @tasks.loop(hours=2)
+    async def bot_status_loop(self):
+        print("Satus Looping")
+        await self.bot_status.new_bot_status()
 
     def basic_setup(self, is_test):
         if is_test:

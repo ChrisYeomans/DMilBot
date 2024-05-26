@@ -1,8 +1,12 @@
+from __future__ import annotations
 from datetime import timedelta
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Bot import Bot
 
 
 class TimeoutSpam:
-    def __init__(self, bot):
+    def __init__(self, bot: Bot):
         self.bot = bot
 
     async def run(self, message):
