@@ -1,12 +1,14 @@
+import discord
 from random import choice
+from typing import Dict, List
 
 
 class BotConstants:
-    game_comment_dict = {}
-    disconnect_message_lst = []
-    spam_repeat_number = 3
-    spam_timeout_minutes = 3
-    spam_timeout_words = []
+    game_comment_dict: Dict[str, str] = {}
+    disconnect_message_lst: List[str] = []
+    spam_timeout_words: List[str] = []
+    spam_repeat_number: int = 3
+    spam_timeout_minutes: int = 3
 
     def __init__(self):
         self.rng_disconnect_odds = (1.5, 20)  # (a, b) = a in b odds
@@ -21,17 +23,17 @@ class BotConstants:
             "Get shit on nerd",
             "F",
             "Skill Issue",
-            "Eat my shorts"
+            "Eat my ass"
         ]
 
         self.spam_timeout_words = [
             "scoreboard",
         ]
 
-    def rng_disconnect_message(self, member) -> str:
+    def rng_disconnect_message(self, member: discord.Member) -> str:
         return f"HAHA {member.mention} {choice(self.disconnect_message_lst)}"
 
-    def spam_timeout_message(self, member, word: str) -> str:
+    def spam_timeout_message(self, member: discord.Member, word: str) -> str:
         return f"{member.mention} DOWN WITH THE {word.upper()}"
 
     def spam_timeout_reason(self) -> str:

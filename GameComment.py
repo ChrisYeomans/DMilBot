@@ -1,6 +1,8 @@
 from __future__ import annotations
+import discord
 from datetime import datetime
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from Bot import Bot
 
@@ -9,7 +11,7 @@ class GameComment:
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    async def run(self, before, after):
+    async def run(self, before: discord.channel, after: discord.channel):
         game_comment_dict = self.bot.constants.game_comment_dict
         print("presence update")
         for activity in after.activities:
@@ -25,7 +27,7 @@ class GameComment:
     def presence_update_cooldown_done(self, member_name: str, cooldown_length: int) -> bool:
         print(
             f"cooldown update {member_name} {self.bot.member_presence_cooldowns[member_name] if member_name in self.bot.member_presence_cooldowns else 'new'}")
-        now = datetime.now()
+        now: datetime = datetime.now()
         if member_name in self.bot.member_presence_cooldowns:
             timediff = now - self.bot.member_presence_cooldowns[member_name]
             cooldown_done = timediff.total_seconds() // 60 > cooldown_length

@@ -1,5 +1,7 @@
 import discord
+from datetime import datetime
 from discord.ext import tasks
+from typing import Dict, List
 from bot_constants import BotConstants
 from GameComment import GameComment
 from RngDisconnect import RngDisconnect
@@ -14,27 +16,27 @@ class Bot:
         self.general_channel_id: int = None
         self.guild_id: int = None
         self.client: discord.Client = None
-        self.member_presence_cooldowns = {}
-        self.member_spam_check = {}
+        self.member_presence_cooldowns: Dict[str, datetime] = {}
+        self.member_spam_check: Dict[str, List[str]] = {}
 
         self.basic_setup(is_test)
-        self.rng_disconnect = RngDisconnect(self)
-        self.constants = BotConstants()
-        self.timeout_spam = TimeoutSpam(self)
-        self.bot_commands = BotCommands(self, is_test)
-        self.game_comment = GameComment(self)
-        self.bot_status = BotStatus(self)
+        self.rng_disconnect: RngDisconnect = RngDisconnect(self)
+        self.constants: BotConstants = BotConstants()
+        self.timeout_spam: TimeoutSpam = TimeoutSpam(self)
+        self.bot_commands: BotCommands = BotCommands(self, is_test)
+        self.game_comment: GameComment = GameComment(self)
+        self.bot_status: BotStatus = BotStatus(self)
 
         @self.client.event
-        async def on_message(message):
+        async def on_message(message: discord.Message):
             await self.timeout_spam.run(message)
 
         @self.client.event
-        async def on_voice_state_update(member, before, after):
+        async def on_voice_state_update(member: discord.Member, before: discord.channel, after: discord.channel):
             await self.rng_disconnect.run(member, before, after)
 
         @self.client.event
-        async def on_presence_update(before, after):
+        async def on_presence_update(before: discord.channel, after: discord.channel):
             await self.game_comment.run(before, after)
 
         @self.client.event
@@ -45,10 +47,10 @@ class Bot:
 
     @tasks.loop(hours=2)
     async def bot_status_loop(self):
-        print("Satus Looping")
+        print("Status Looping")
         await self.bot_status.new_bot_status()
 
-    def basic_setup(self, is_test):
+    def basic_setup(self, is_test: bool):
         if is_test:
             token_file_name = "test_token.txt"
             self.general_channel_id = 709082873994412046
