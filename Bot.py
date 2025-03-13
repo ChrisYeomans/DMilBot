@@ -8,6 +8,7 @@ from RngDisconnect import RngDisconnect
 from BotCommands import BotCommands
 from TimeoutSpam import TimeoutSpam
 from BotStatus import BotStatus
+from MusicPlayer import MusicPlayer
 
 
 class Bot:
@@ -26,6 +27,7 @@ class Bot:
         self.bot_commands: BotCommands = BotCommands(self, is_test)
         self.game_comment: GameComment = GameComment(self)
         self.bot_status: BotStatus = BotStatus(self)
+        self.music_player: MusicPlayer = MusicPlayer(self)
 
         @self.client.event
         async def on_message(message: discord.Message):

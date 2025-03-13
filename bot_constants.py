@@ -12,6 +12,7 @@ class BotConstants:
 
     def __init__(self):
         self.rng_disconnect_odds = (1.5, 20)  # (a, b) = a in b odds
+        self.boon_rand_odds = (1, 25)  # (a, b) = a in b odds
         self.game_comment_dict = {
             "Genshin Impact": "Wow playing Genshin, go touch some grass",
             "Fortnite": "is playing Fortnite, looks like we got the next ninja",

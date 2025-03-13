@@ -11,7 +11,7 @@ class RngDisconnect:
         self.bot = bot
 
     async def run(self, member, before: discord.channel, after: discord.channel):
-        if not before.channel and after.channel:
+        if not before.channel and after.channel and member.id != self.bot.client.user.id:
             user_rand = randint(1, self.bot.constants.rng_disconnect_odds[1] * 10)
             print(f"User: {member.name} joined voice channel: {after.channel} with user_rand: {user_rand}")
             if user_rand > (self.bot.constants.rng_disconnect_odds[1] - self.bot.constants.rng_disconnect_odds[0]) * 10:

@@ -18,8 +18,8 @@ class GameComment:
             print(activity.name)
             if activity.name in game_comment_dict \
                     and activity not in before.activities \
-                    and self.presence_update_cooldown_done(after.name, 600) \
-                    and self.presence_update_cooldown_done("global", 60):
+                    and self.presence_update_cooldown_done(after.name, 1200) \
+                    and self.presence_update_cooldown_done("global", 800):
                 tc = self.bot.client.get_channel(self.bot.general_channel_id)
                 await tc.send(f"{after.name} {game_comment_dict[activity.name]}")
                 break

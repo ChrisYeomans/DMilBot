@@ -10,6 +10,7 @@ class BotCommands:
         self.bot: Bot = bot
         self.tree: discord.app_commands.CommandTree = discord.app_commands.CommandTree(bot.client)
         self.tree.clear_commands(guild=discord.Object(id=bot.guild_id))
+        self.setup_music_commands(self.tree)
         if setup_test_commands:
             self.setup_test_commands(self.tree)
 
@@ -29,3 +30,24 @@ class BotCommands:
                     print(f"{user.name} is not playing anything.")
                 except discord.NotFound:
                     print("User not found.")
+
+    def setup_music_commands(self, tree):
+        @tree.command(name="play", guild=discord.Object(id=self.bot.guild_id))
+        async def play(interaction: discord.interactions, name: str):
+            await self.bot.music_player.play(interaction, name)
+
+        @tree.command(name="stop", guild=discord.Object(id=self.bot.guild_id))
+        async def stop(interaction: discord.interactions):
+            await self.bot.music_player.stop(interaction)
+
+        @tree.command(name="skip", guild=discord.Object(id=self.bot.guild_id))
+        async def skip(interaction: discord.interactions):
+            await self.bot.music_player.skip(interaction)
+
+        @tree.command(name="queue", guild=discord.Object(id=self.bot.guild_id))
+        async def queue(interaction: discord.interactions):
+            await self.bot.music_player.queue(interaction)
+
+        @tree.command(name="playing", guild=discord.Object(id=self.bot.guild_id))
+        async def playing(interaction: discord.interactions):
+            await self.bot.music_player.playing(interaction)
